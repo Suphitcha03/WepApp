@@ -5,58 +5,61 @@ class User{
     {
         $this->db=$con;
     }
-    function insertUser($username,$password){
+    function insertUser(string $username,string $password) {
         try{
-           $result= $this->getUserByUsername($username); //เคยถูกเก็บบันทึกในฐานข้อมูลไหม ถ้ามีค่า มากกว่า 0 ไม่เกิดกระบวนการบันทึกข้อมูล
-            if($result["num"]>0){
+           $result= $this->userExists($username); //เคยถูกเก็บบันทึกในฐานข้อมูลไหม ถ้ามีค่า มากกว่า 0 ไม่เกิดกระบวนการบันทึกข้อมูล
+            if($result && (int)$result["num"]>0){
                 return false;
             } else{
-                $new_password = md5($password.$username); //12345admin->md5
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            //$new_password = md5($password.$username); //12345admin->md5
             $sql = "INSERT INTO
             users(username,password)
             VALUES (:username,:password)";
             $stmt =$this->db->prepare($sql);
             $stmt->bindParam(":username",$username);
-            $stmt->bindParam(":password",$new_password);
-            $stmt->execute();
-            return true; //บันทึกผู้ใช้เเล้ว
+            $stmt->bindParam(":password",$hash);
+            return $stmt->execute();
+            ; //บันทึกผู้ใช้เเล้ว
 
             }
         }catch(PDOException $e){
-            echo $e->getMessage();
             return false;
         }
     }
-    function getUserByUserName($username){
+    function userExists(string $username) {
         try{
-            $sql = "SELECT COUNT(*) as num
-                    FROM users
-                    WHERE username =:username";
+            $sql = "SELECT EXISTS(SELECT 1 FROM users 
+                    WHERE username = :username) AS num";
             $stmt=$this->db->prepare($sql);
-            $stmt->bindPAram(":username",$username);
+            $stmt->bindParam(":username",$username);
             $stmt->execute();
-            $result = $stmt->fetch(); //นับชื่อผู้ใช้ซ้ำกี่แถว
-            return $result;
+            $row = $stmt->fetch(); //นับชื่อผู้ใช้ซ้ำกี่แถว
+            return ['num' => $row ? (int)$row['exists_user'] : 0];
 
         }catch(PDOException $e){
-            echo $e->getMessage();
             return false;
         }
     }
     //ใช้เชื่อมกับระบบ login
-    function getUser($username,$password){
+    function getUser(string $username, string $password){
     try{
             $sql = "SELECT * FROM users
-                    WHERE username=:username
-                    AND password = :password ";
+                    WHERE username=:username LIMIT 1;";
+            
             $stmt=$this->db->prepare($sql);
-            $stmt->bindPAram(":username",$username);
-            $stmt->bindPAram(":password",$password);
+            $stmt->bindParam(":username",$username);
             $stmt->execute();
-            $result = $stmt->fetch(PDO :: FETCH_ASSOC);
-            return $result;
+            $row = $stmt->fetch();
+            if(!$row){
+                return false; //ไม่พบผู้ใช้
+            }
+            if (password_verify($password,$row['password'])){
+                unset($row['password']); //ไม่ส่งแอชขึ้นไปชั้นบน
+                return $row; //ล็อกอินสำเร็จ
+            }
+            return false;            
         }catch(PDOException $e){
-            echo $e->getMessage();
             return false;
         }
     }

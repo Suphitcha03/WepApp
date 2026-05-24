@@ -21,7 +21,7 @@ $result = $controller->getEmployees();
     </tr>
   </thead>
   <tbody>
-    <?php while($row=$result->fetch(PDO :: FETCH_ASSOC)){?>
+    <?php while($row=$result->fetch()){?>
     <tr>
       <td><?php echo $row["fname"]; ?></td>
       <td><?php echo $row["lname"]; ?></td>

@@ -2,7 +2,7 @@
 class Controller {
     private $db;
 
-    function __construct($con){
+    function __construct( $con){
         $this->db=$con;
         //echo "มีการเรียกใช้งาน Controller";
     }
@@ -10,29 +10,29 @@ class Controller {
 
     function getDepartments(){
         try{
-            $sql ="select * from departments";
-            $result = $this->db->query($sql);
-            return $result;
+            $sql ="SELECT department_id, department_name 
+                   FROM departments
+                   ORDER BY department_name ASC";
+            $stmt = $this->db->query($sql);
+            return $stmt;
         }catch(PDOException $e){
-        echo $e->getMessage();
         return false;
         }
     }
 
-    function getEmployees(){
+    function getEmployees() {
         try{
-            $sql ="select *
-            from employees e
-            inner join departments d on e.department_id = d.department_id
-            order by e.salary ASC"; //เลือกการเชื่อมตาราง
-            $result = $this->db->query($sql);
-            return $result;
+            $sql ="SELECT *
+            FROM employees e
+            INNER JOIN departments d ON e.department_id = d.department_id
+            ORDER BY e.salary ASC"; 
+            $stmt = $this->db->query($sql);
+            return $stmt->fetchAll();
         }catch(PDOException $e){
-        echo $e->getMessage();
         return false;
         }
     }
-    function insert($fname,$lname,$salary,$department_id){
+    function insert(string $fname, string $lname, float $salary, int $department_id): bool {
         try{
         $sql = "INSERT INTO employees(fname,lname,salary,department_id)
                 VALUES(:fname,:lname,:salary,:department_id)
@@ -50,7 +50,7 @@ class Controller {
         return false;
         }
     } 
-        function delete($id){
+        function delete(int $id) : bool{
             try{
             $sql="DELETE FROM employees
                 WHERE emp_id=:id"; //เอารหัสพนงมาเป็นตัวอ้างอิง โดยรหัสพนงที่ส่งมาจะให้parametor :id เป็นคนรับค่าที่ส่งมา
@@ -60,27 +60,26 @@ class Controller {
                  return true;
 
             }catch(PDOException $e){
-                echo $e->getMessage();
                 return false;
             }
         }
-        function getEmployeeDetail($id){
+        function getEmployeeDetail(int $id) {
             try{
                 $sql="SELECT * FROM employees e 
                     INNER JOIN departments d on d.department_id = e.department_id
-                    WHERE emp_id = :id";
+                    WHERE emp_id = :id
+                    LIMIT 1";
                 $stmt=$this->db->prepare($sql);
                 $stmt->bindParam(":id",$id);
                 $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $result = $stmt->fetch();
                 return $result;
 
             }catch(PDOException $e){
-                echo $e->getMessage();
                 return false;
             }
         }
-        function update($fname,$lname,$salary,$department_id,$emp_id){
+        function update($fname,$lname,$salary,$department_id,$emp_id): bool{
             try{
                 $sql="UPDATE employees
                         SET fname=:fname , lname =:lname , salary=:salary, department_id = :department_id 
@@ -95,7 +94,6 @@ class Controller {
                 return true;
 
             }catch(PDOException $e){
-                echo $e->getMessage();
                 return false;
             }
         }

@@ -6,9 +6,9 @@
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username = $_POST["username"];
         $password = $_POST["password"];
-        $new_password=md5($password.$username);
-       
-        $result = $user->getUser($username,$new_password);
+
+        
+        $result = $user->getUser($username,$password);
 
         if(!$result){
             echo '<div class= "alert alert-danger">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>';
@@ -25,8 +25,8 @@
             <form method="POST" action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>">
                 <div class ="form-group">
                     <label for="fname">Username</label>
-                    <input type="text" 
-                    name="username" 
+                    <input type="text"
+                    name="username"
                     class="form-control"
                     value="<?php if($_SERVER["REQUEST_METHOD"] =="POST") echo $_POST["username"];  ?>">
                 </div>
