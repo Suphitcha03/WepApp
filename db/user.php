@@ -20,7 +20,7 @@ class User{
             $stmt->bindParam(":username",$username);
             $stmt->bindParam(":password",$hash);
             return $stmt->execute();
-            ; //บันทึกผู้ใช้เเล้ว
+            //บันทึกผู้ใช้เเล้ว
 
             }
         }catch(PDOException $e){
@@ -35,7 +35,7 @@ class User{
             $stmt->bindParam(":username",$username);
             $stmt->execute();
             $row = $stmt->fetch(); //นับชื่อผู้ใช้ซ้ำกี่แถว
-            return ['num' => $row ? (int)$row['exists_user'] : 0];
+            return ['num' => $row ? (int)$row['num'] : 0];
 
         }catch(PDOException $e){
             return false;
