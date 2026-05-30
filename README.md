@@ -16,12 +16,3 @@ A web-based Employee Management System featuring core CRUD operations, built wit
 
 ---
 
-## 🛠️ Installation & Setup
-
-Follow these steps to set up and run the project locally:
-
-### 1. Clone the Repository
-Open your terminal or command prompt and run:
-```bash
-git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-cd your-repo-name
