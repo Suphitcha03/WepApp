@@ -96,30 +96,6 @@ class Controller {
                 return false;
             }
         }
-        function insertProduct(string $name, float $price, string $image): bool {
-    try {
-        $sql = "INSERT INTO products(name, price, image)
-                VALUES(:name, :price, :image)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(":name",  $name);
-        $stmt->bindParam(":price", $price);
-        $stmt->bindParam(":image", $image);
-        $stmt->execute();
-        return true;
-    } catch(PDOException $e) {
-        return false;
-    }
-    
-}
-function getProducts() {
-    try {
-        $sql = "SELECT * FROM products ORDER BY created_at DESC";
-        $stmt = $this->db->query($sql);
-        return $stmt->fetchAll();
-    } catch (PDOException $e) {
-        return false;
-    }
-}
     }
 
 
