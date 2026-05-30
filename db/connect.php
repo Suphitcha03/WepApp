@@ -1,10 +1,10 @@
 <?php
 
-$host="localhost"; //sql311.infinityfree.com
-$username = "root"; //if0_41984370
-$password = ""; //
-$db="employeesdb"; //if0_41984370_mydb
-$dsn="mysql:host=$host;dbname=$db;charset=utf8"; // charset=utf8 คือยากให้ฐานข้อมูลรองรับการใช้ภาษาไทยด้วย
+$host="localhost";
+$username = getenv('DB_USER') ?: "root"; 
+$password = getenv("DB_PASS") ?: ""; 
+$db="employeesdb"; 
+$dsn="mysql:host=$host;dbname=$db;charset=utf8mb4"; // charset=utf8 คือยากให้ฐานข้อมูลรองรับการใช้ภาษาไทยด้วย
 
 try{
     $pdo = new PDO($dsn,$username,$password,[
@@ -16,8 +16,9 @@ try{
     //echo $e->getMessage();
     exit('Database connection failed.');
 }
-require_once "db/controller.php";
-require_once "db/user.php";
+require_once __DIR__."/controller.php";
+require_once __DIR__. "/user.php";
+
 $controller = new Controller($pdo); //จัดการข้อมูลพนักงาน
 $user = new User($pdo); // จัดการผู้ใช้ระบบ
 

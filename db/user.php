@@ -1,6 +1,6 @@
 <?php
 class User{
-    private $db; //สร้างแอคทิบิ้ว 1 ตัวชื่อ private db
+    private $db;
     function __construct($con)
     {
         $this->db=$con;
@@ -8,11 +8,10 @@ class User{
     function insertUser(string $username,string $password) {
         try{
            $result= $this->userExists($username); //เคยถูกเก็บบันทึกในฐานข้อมูลไหม ถ้ามีค่า มากกว่า 0 ไม่เกิดกระบวนการบันทึกข้อมูล
-            if($result && (int)$result["num"]>0){
+            if($result && (int)$result['num'] > 0){
                 return false;
             } else{
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            //$new_password = md5($password.$username); //12345admin->md5
             $sql = "INSERT INTO
             users(username,password)
             VALUES (:username,:password)";
@@ -21,7 +20,6 @@ class User{
             $stmt->bindParam(":password",$hash);
             return $stmt->execute();
             //บันทึกผู้ใช้เเล้ว
-
             }
         }catch(PDOException $e){
             return false;
@@ -35,8 +33,7 @@ class User{
             $stmt->bindParam(":username",$username);
             $stmt->execute();
             $row = $stmt->fetch(); //นับชื่อผู้ใช้ซ้ำกี่แถว
-            return ['num' => $row ? (int)$row['num'] : 0];
-
+            return ['num' => (int)$row['num'] ?? 0];
         }catch(PDOException $e){
             return false;
         }
@@ -51,6 +48,10 @@ class User{
             $stmt->bindParam(":username",$username);
             $stmt->execute();
             $row = $stmt->fetch();
+        // เพิ่มตรงนี้เพื่อเช็ค
+        // var_dump($row);
+        // var_dump(password_verify($password, $row['password']));
+        // die();
             if(!$row){
                 return false; //ไม่พบผู้ใช้
             }

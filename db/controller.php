@@ -4,7 +4,6 @@ class Controller {
 
     function __construct( $con){
         $this->db=$con;
-        //echo "มีการเรียกใช้งาน Controller";
     }
 
 
@@ -27,7 +26,7 @@ class Controller {
             INNER JOIN departments d ON e.department_id = d.department_id
             ORDER BY e.salary ASC"; 
             $stmt = $this->db->query($sql);
-            return $stmt->fetchAll();
+            return $stmt;
         }catch(PDOException $e){
         return false;
         }
@@ -67,7 +66,7 @@ class Controller {
             try{
                 $sql="SELECT * FROM employees e 
                     INNER JOIN departments d on d.department_id = e.department_id
-                    WHERE emp_id = :id
+                    WHERE e.emp_id = :id
                     LIMIT 1";
                 $stmt=$this->db->prepare($sql);
                 $stmt->bindParam(":id",$id);
@@ -79,7 +78,7 @@ class Controller {
                 return false;
             }
         }
-        function update($fname,$lname,$salary,$department_id,$emp_id): bool{
+        function update(string $fname, string $lname, float $salary, int $department_id, int $emp_id): bool{
             try{
                 $sql="UPDATE employees
                         SET fname=:fname , lname =:lname , salary=:salary, department_id = :department_id 
@@ -97,6 +96,30 @@ class Controller {
                 return false;
             }
         }
+        function insertProduct(string $name, float $price, string $image): bool {
+    try {
+        $sql = "INSERT INTO products(name, price, image)
+                VALUES(:name, :price, :image)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(":name",  $name);
+        $stmt->bindParam(":price", $price);
+        $stmt->bindParam(":image", $image);
+        $stmt->execute();
+        return true;
+    } catch(PDOException $e) {
+        return false;
+    }
+    
+}
+function getProducts() {
+    try {
+        $sql = "SELECT * FROM products ORDER BY created_at DESC";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        return false;
+    }
+}
     }
 
 
