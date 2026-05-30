@@ -10,7 +10,10 @@ $result = $controller->getEmployees();
 ?>
 <body>
         <h1 class ="text-center"><?php echo "ข้อมูลของพนักงาน";?></h1>
-        <table class="table">
+        <div class="text-end mb-3">
+          <a href="addForm.php" class="btn btn-success">+ เพิ่มข้อมูลพนักงาน</a>
+        </div>
+    <table class="table">
   <thead>
     <tr>
       <th scope="col">ชื่อพนักงาน</th>
@@ -26,9 +29,7 @@ $result = $controller->getEmployees();
       <td><?php echo $row["fname"]; ?></td>
       <td><?php echo $row["lname"]; ?></td>
       <td><?php echo number_format($row["salary"]); ?></td> 
-      <!-- //จัดฟอร์เเมต * -->
       <td><?php echo $row["department_name"]; ?></td> 
-      <!-- เปลี่ยนจาก department_id-> nameเพราะทำการ inner join เเล้ว -->
        <td>
         <a onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่ ?')"
         href="delete.php?id=<?php echo $row["emp_id"];?>" class="btn btn-danger">ลบข้อมูล</a>
@@ -38,7 +39,5 @@ $result = $controller->getEmployees();
     <?php } ?>
   </tbody>
 </table>
-        <button class="btn btn-primary">click</button>
-
 </body>
 </html>
