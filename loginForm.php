@@ -9,7 +9,13 @@
 
         
         $result = $user->getUser($username,$password);
-
+        // เพิ่มบรรทัดนี้ชั่วคราว
+        //      var_dump($username);
+        // var_dump($password);
+    
+        // $row = $user->getUser($username, $password);
+        // var_dump($row);
+        // die();
         if(!$result){
             echo '<div class= "alert alert-danger">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>';
 
@@ -17,6 +23,7 @@
             $_SESSION["username"] = $username;
             $_SESSION["userid"] = $result["id"];
             header("Location:index.php");
+            exit();
         }
     }
 ?>
@@ -35,6 +42,6 @@
                     <input type="password" name="password" class="form-control">
                 </div>
                 <input type="submit" name="submit" value="เข้าสู่ระบบ" class ="btn btn-primary my-3">
-        </form>
+            </form>
 </body>
 </html>

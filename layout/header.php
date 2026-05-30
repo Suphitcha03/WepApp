@@ -15,7 +15,7 @@ require_once "layout/session.php";
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="index.php">ILOVEALEX</a>
+    <a class="navbar-brand" href="index.php">SUPERSTONE</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -36,7 +36,7 @@ require_once "layout/session.php";
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             สวัสดี, <?php echo $_SESSION["username"];    ?>
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelled by="navbarDropdown">
             <li><a class="dropdown-item" href="logout.php">ออกจากระบบ</a></li>
           </ul>
         </li>
